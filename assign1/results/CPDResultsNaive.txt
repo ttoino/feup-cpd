@@ -1,0 +1,289 @@
+(base) matiasfg@matiasfg-Desktop:~/Documents/CPD/assign1/src$ make run
+./matrixproduct
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1  
+Dimensions: lins=cols ? 512
+Time: 0.30591163 seconds
+Result matrix: 
+131328 131328 131328 131328 131328 131328 131328 131328 131328 131328 
+L1 DCM: 145096776 
+L2 DCM: 696554 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 512
+Time: 0.29238579 seconds
+Result matrix: 
+131328 131328 131328 131328 131328 131328 131328 131328 131328 131328 
+L1 DCM: 144082110 
+L2 DCM: 708819 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 512
+Time: 0.30443948 seconds
+Result matrix: 
+131328 131328 131328 131328 131328 131328 131328 131328 131328 131328 
+L1 DCM: 144892430 
+L2 DCM: 3405075 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1024
+Time: 3.36365002 seconds
+Result matrix: 
+524800 524800 524800 524800 524800 524800 524800 524800 524800 524800 
+L1 DCM: 1155932295 
+L2 DCM: 290337213 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1024
+Time: 3.34672351 seconds
+Result matrix: 
+524800 524800 524800 524800 524800 524800 524800 524800 524800 524800 
+L1 DCM: 1154206424 
+L2 DCM: 277917553 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1024
+Time: 3.32115388 seconds
+Result matrix: 
+524800 524800 524800 524800 524800 524800 524800 524800 524800 524800 
+L1 DCM: 1154005338 
+L2 DCM: 273227481 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1536
+Time: 14.81670078 seconds
+Result matrix: 
+1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 
+L1 DCM: 3913634171 
+L2 DCM: 2316203943 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1   
+Dimensions: lins=cols ? 1536
+Time: 14.93085835 seconds
+Result matrix: 
+1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 
+L1 DCM: 3915076902 
+L2 DCM: 2320569551 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1536
+Time: 14.88828210 seconds
+Result matrix: 
+1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 
+L1 DCM: 3912327788 
+L2 DCM: 2315734029 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 2048
+Time: 40.54227233 seconds
+Result matrix: 
+2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 
+L1 DCM: 14357361572 
+L2 DCM: 6071468454 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 2048
+Time: 40.54994801 seconds
+Result matrix: 
+2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 
+L1 DCM: 14354695489 
+L2 DCM: 6052303547 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 2048
+Time: 40.58004050 seconds
+Result matrix: 
+2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 2.09818e+06 
+L1 DCM: 14361931333 
+L2 DCM: 6061824692 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 2560
+Time: 85.46918299 seconds
+Result matrix: 
+3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 
+L1 DCM: 30204429327 
+L2 DCM: 13366113817 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 2560
+Time: 84.53997002 seconds
+Result matrix: 
+3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 
+L1 DCM: 30195249604 
+L2 DCM: 13311010256 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 2560
+Time: 85.18594999 seconds
+Result matrix: 
+3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 3.27808e+06 
+L1 DCM: 30212307312 
+L2 DCM: 13348240884 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 3072
+Time: 149.89443568 seconds
+Result matrix: 
+4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 
+L1 DCM: 55475295336 
+L2 DCM: 24413902632 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 3072
+Time: 149.80096769 seconds
+Result matrix: 
+4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 
+L1 DCM: 55494823438 
+L2 DCM: 24386434593 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 3072
+Time: 149.66828338 seconds
+Result matrix: 
+4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 4.72013e+06 
+L1 DCM: 55499288606 
+L2 DCM: 24413478582 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 4096
+Time: 375.13835598 seconds
+Result matrix: 
+8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 
+L1 DCM: 147753645253 
+L2 DCM: 71607407455
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 4096
+Time: 373.00755830 seconds
+Result matrix: 
+8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 
+L1 DCM: 147403416560 
+L2 DCM: 69813201259  
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 4096
+Time: 373.64270898 seconds
+Result matrix: 
+8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 8.39066e+06 
+L1 DCM: 147625703669 
+L2 DCM: 70006317544
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 6144
+Time: 1288.83316881 seconds
+Result matrix: 
+1.88774e+07 1.88774e+07 1.88774e+07 1.88774e+07 1.88774e+07 1.88774e+07 1.88774e+07 1.88774e+07 1.88774e+07 1.88774e+07 
+L1 DCM: 498899468857 
+L2 DCM: 306006997516
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 8192
+Time: 3091.23730094 seconds
+Result matrix: 
+3.35585e+07 3.35585e+07 3.35585e+07 3.35585e+07 3.35585e+07 3.35585e+07 3.35585e+07 3.35585e+07 3.35585e+07 3.35585e+07 
+L1 DCM: 1178450890135 
+L2 DCM: 946074112434
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 10240
+Time: 6031.93813983 seconds
+Result matrix: 
+5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 
+L1 DCM: 2306133245771 
+L2 DCM: 2018614164646 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 10240
+Time: 6033.41597065 seconds
+Result matrix: 
+5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 
+L1 DCM: 2309424752963 
+L2 DCM: 2021328772974 
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 10240
+Time: 6039.99344401 seconds
+Result matrix: 
+5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 5.24339e+07 
+L1 DCM: 2305917510887 
+L2 DCM: 2013371977473
+

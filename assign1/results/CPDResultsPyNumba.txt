@@ -1,0 +1,53 @@
+python3 matrixproductnumba.py
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 512
+Time: 0.58095106 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1024
+Time: 5.51569506 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1536
+Time: 23.05253084 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 2048
+Time: 55.34987922 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 512
+Time: 0.18118698 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 1024
+Time: 1.40383863 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 1536
+Dimensions: lins=cols ? 1
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1536
+Time: 16.46180365 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 2048
+Time: 11.39313921 seconds
+

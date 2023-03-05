@@ -36,7 +36,7 @@ using namespace std;
 
 #define cleanup()                                                              \
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);                             \
-    printf("Time: %3.3f seconds\n", diff_timespec(&end, &start));              \
+    printf("Time: %.8f seconds\n", diff_timespec(&end, &start));              \
                                                                                \
     cout << "Result matrix: " << endl;                                         \
     for (j = 0; j < min(10, size_b); j++)                                      \

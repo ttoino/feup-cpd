@@ -1,0 +1,56 @@
+pypy3 matrixproduct.py
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 512
+Time: 0.47642357 seconds
+
+Result matrix: 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1024
+Time: 3.97355376 seconds
+
+Result matrix: 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1536
+Time: 18.23122199 seconds
+
+Result matrix: 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 2048
+Time: 44.46055314 seconds
+
+Result matrix: 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 512
+Time: 0.19021914 seconds
+
+Result matrix: 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 1024
+Time: 1.42435484 seconds
+
+Result matrix: 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 1536
+Time: 4.81808784 seconds
+
+Result matrix: 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 2048
+Time: 11.47868144 seconds
+

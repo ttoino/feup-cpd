@@ -1,40 +1,32 @@
 from time import clock_gettime, CLOCK_PROCESS_CPUTIME_ID
+from numba import njit
 
 
+@njit(fastmath=False)
 def mult(size_a: int, size_b: int):
     a = [1.0] * size_a * size_a
     b = [i + 1 for i in range(size_b) for j in range(size_b)]
     c = [0] * size_a * size_b
-
-    start = clock_gettime(CLOCK_PROCESS_CPUTIME_ID)
 
     for i in range(size_a):
         for j in range(size_b):
             for k in range(size_a):
                 c[i * size_a + j] += a[i * size_a + k] * b[k * size_b + j]
 
-    end = clock_gettime(CLOCK_PROCESS_CPUTIME_ID)
-    print(f"Time: {end - start:8.8f} seconds\n")
 
-    print("Result matrix: " + " ".join(map(str, c[:min(10, size_b)])))
-
-
+@njit(fastmath=False)
 def mult_line(size_a: int, size_b: int):
     a = [1.0] * size_a * size_a
     b = [i + 1 for i in range(size_b) for j in range(size_b)]
     c = [0] * size_a * size_b
 
-    start = clock_gettime(CLOCK_PROCESS_CPUTIME_ID)
 
     for i in range(size_a):
         for k in range(size_a):
             for j in range(size_b):
                 c[i * size_a + j] += a[i * size_a + k] * b[k * size_b + j]
 
-    end = clock_gettime(CLOCK_PROCESS_CPUTIME_ID)
-    print(f"Time: {end - start:8.8f} seconds\n")
-
-    print("Result matrix: " + " ".join(map(str, c[:min(10, size_b)])))
+    
 
 
 def main():
@@ -52,10 +44,21 @@ def main():
         lines = cols = int(input("Dimensions: lins=cols ? "))
 
         if op == 1:
+
+            start = clock_gettime(CLOCK_PROCESS_CPUTIME_ID)
+
             mult(lines, cols)
 
+            end = clock_gettime(CLOCK_PROCESS_CPUTIME_ID)
+            print(f"Time: {end - start:.8f} seconds\n")
         if op == 2:
+            start = clock_gettime(CLOCK_PROCESS_CPUTIME_ID)
+
             mult_line(lines, cols)
+
+            end = clock_gettime(CLOCK_PROCESS_CPUTIME_ID)
+
+            print(f"Time: {end - start:.8f} seconds\n")
 
         # if op == 3:
         #     size_block = int(input("Block Size? "))

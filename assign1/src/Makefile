@@ -19,6 +19,10 @@ run_py: matrixproduct.py
 run_pypy: matrixproduct.py
 	pypy3 matrixproduct.py
 
+.PHONY: run_pynumba
+run_pynumba: matrixproduct.py
+	python3 matrixproductnumba.py
+
 .PHONY: clean
 clean:
 	rm -rf ./matrixproduct

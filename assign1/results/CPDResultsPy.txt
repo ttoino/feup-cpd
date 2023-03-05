@@ -1,0 +1,39 @@
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 512
+Time: 17.07074496 seconds
+
+Result matrix: 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1024
+Time: 151.40531360 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 1536
+Time: 550.66737103 seconds
+
+Result matrix: 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 512
+Time: 16.82963574 seconds
+
+Result matrix: 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 1024
+Time: 134.52097778 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 1536
+Time: 472.74258034 seconds
+
