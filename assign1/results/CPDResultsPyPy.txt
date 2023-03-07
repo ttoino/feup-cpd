@@ -29,28 +29,58 @@ Time: 44.46055314 seconds
 Result matrix: 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0
 1. Multiplication
 2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 2560
+Time: 87.08272807 seconds
+
+Result matrix: 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 3072
+Time: 143.81055510 seconds
+
+Result matrix: 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0
+1. Multiplication
+2. Line Multiplication
 Selection?: 2
 Dimensions: lins=cols ? 512
-Time: 0.19021914 seconds
+Time: 0.66055005 seconds1
 
 Result matrix: 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0 131328.0
 1. Multiplication
 2. Line Multiplication
-Selection?: 2
+Selection?: 2   
 Dimensions: lins=cols ? 1024
-Time: 1.42435484 seconds
+Time: 5.28938134 seconds
 
-Result matrix: 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0 524800.0
 1. Multiplication
 2. Line Multiplication
 Selection?: 2
 Dimensions: lins=cols ? 1536
-Time: 4.81808784 seconds
+Time: 17.96636550 seconds
 
 Result matrix: 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0 1180416.0
 1. Multiplication
 2. Line Multiplication
 Selection?: 2
 Dimensions: lins=cols ? 2048
-Time: 11.47868144 seconds
+Time: 42.62500353 seconds
+
+Result matrix: 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 2560
+Time: 82.87831416 seconds
+
+Result matrix: 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 2
+Dimensions: lins=cols ? 3072
+Time: 142.19954119 seconds
+
+Result matrix: 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0 4720128.0
+
 

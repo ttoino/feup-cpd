@@ -15,7 +15,7 @@ Time: 5.51569506 seconds
 2. Line Multiplication
 Selection?: 1
 Dimensions: lins=cols ? 1536
-Time: 23.05253084 seconds
+Time: 16.46180365 seconds
 
 1. Multiplication
 2. Line Multiplication
@@ -37,17 +37,19 @@ Time: 1.40383863 seconds
 
 1. Multiplication
 2. Line Multiplication
-Selection?: 1536
-Dimensions: lins=cols ? 1
-1. Multiplication
-2. Line Multiplication
-Selection?: 1
-Dimensions: lins=cols ? 1536
-Time: 16.46180365 seconds
-
-1. Multiplication
-2. Line Multiplication
 Selection?: 2
 Dimensions: lins=cols ? 2048
 Time: 11.39313921 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 1 
+Dimensions: lins=cols ? 2560
+Time: 111.32740527 seconds
+
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 3072
+Time: 206.20600712 seconds
 
