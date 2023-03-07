@@ -25,7 +25,13 @@ Dimensions: lins=cols ? 2048
 Time: 1337.47322860 seconds
 
 Result matrix: 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0 2098176.0
+1. Multiplication
+2. Line Multiplication
+Selection?: 1
+Dimensions: lins=cols ? 2560
+Time: 2731.60545053 seconds
 
+Result matrix: 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0 3278080.0
 1. Multiplication
 2. Line Multiplication
 Selection?: 1
