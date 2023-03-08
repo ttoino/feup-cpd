@@ -62,7 +62,18 @@ Time: 0.32701066 seconds
 Result matrix: 
 524800 524800 524800 524800 524800 524800 524800 524800 524800 524800 
 L1 DCM: 151337444 
-L2 DCM: 510398 
+L2 DCM: 510398
+
+1. Multiplication
+2. Line Multiplication
+3. Block Multiplication
+Selection?: 2   
+Dimensions: lins=cols ? 1536
+Time: 1.13986243 seconds
+Result matrix: 
+1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 1.18042e+06 
+L1 DCM: 572918827 
+L2 DCM: 1228244 
 
 1. Multiplication
 2. Line Multiplication
