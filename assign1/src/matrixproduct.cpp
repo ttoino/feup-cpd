@@ -32,11 +32,17 @@ using namespace std;
         for (j = 0; j < size_b; j++)                                           \
             c[i * size_b + j] = 0.0;                                           \
                                                                                \
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);                           \
+                                                                               \
+    if (PAPI_start(event_set) != PAPI_OK)                                      \
+        cerr << "ERROR: Start PAPI" << endl;
 
 #define cleanup()                                                              \
+    if (PAPI_stop(event_set, values) != PAPI_OK)                               \
+        cerr << "ERROR: Stop PAPI" << endl;                                    \
+                                                                               \
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);                             \
-    printf("Time: %.8f seconds\n", diff_timespec(&end, &start));              \
+    printf("Time: %.8f seconds\n", diff_timespec(&end, &start));               \
                                                                                \
     cout << "Result matrix: " << endl;                                         \
     for (j = 0; j < min(10, size_b); j++)                                      \
@@ -140,9 +146,6 @@ int main(int argc, char *argv[]) {
         values[0] = 0;
         values[1] = 0;
 
-        // Start counting
-        if (PAPI_start(event_set) != PAPI_OK)
-            cerr << "ERROR: Start PAPI" << endl;
 #endif
 
         switch (op) {
@@ -160,9 +163,6 @@ int main(int argc, char *argv[]) {
         }
 
 #if HAS_PAPI
-        if (PAPI_stop(event_set, values) != PAPI_OK)
-            cerr << "ERROR: Stop PAPI" << endl;
-
         printf("L1 DCM: %lld \n", values[0]);
         printf("L2 DCM: %lld \n", values[1]);
 

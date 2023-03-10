@@ -1,3 +1,8 @@
 assign1/src/matrixproduct
+assign1/doc/*
+!*/doc/data
+!*/doc/figures
+!*/doc/*.tex
+!*/doc/*.pdf
 .vscode/**
 .idea/**
