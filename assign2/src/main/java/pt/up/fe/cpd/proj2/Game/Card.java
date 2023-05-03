@@ -2,84 +2,59 @@ package pt.up.fe.cpd.proj2.Game;
 
 public class Card {
 
-    private String symbol;
-    private int value;
+    private final String symbol;
+    private final int value;
 
-    private String suit;
+    private final String suit;
 
     public Card(String symbol, String suit) throws Exception {
         switch (symbol) {
-            case "Ace":
+            case "Ace" -> {
                 this.symbol = symbol;
                 this.value = 11;
-                break;
-            case "2":
+            }
+            case "2" -> {
                 this.symbol = symbol;
                 this.value = 2;
-                break;
-            case "3":
+            }
+            case "3" -> {
                 this.symbol = symbol;
                 this.value = 3;
-                break;
-            case "4":
+            }
+            case "4" -> {
                 this.symbol = symbol;
                 this.value = 4;
-                break;
-            case "5":
+            }
+            case "5" -> {
                 this.symbol = symbol;
                 this.value = 5;
-                break;
-            case "6":
+            }
+            case "6" -> {
                 this.symbol = symbol;
                 this.value = 6;
-                break;
-            case "7":
+            }
+            case "7" -> {
                 this.symbol = symbol;
                 this.value = 7;
-                break;
-            case "8":
+            }
+            case "8" -> {
                 this.symbol = symbol;
                 this.value = 8;
-                break;
-            case "9":
+            }
+            case "9" -> {
                 this.symbol = symbol;
                 this.value = 9;
-                break;
-            case "10":
+            }
+            case "10", "Jack", "Queen", "King" -> {
                 this.symbol = symbol;
                 this.value = 10;
-                break;
-            case "Jack":
-                this.symbol = symbol;
-                this.value = 10;
-                break;
-            case "Queen":
-                this.symbol = symbol;
-                this.value = 10;
-                break;
-            case "King":
-                this.symbol = symbol;
-                this.value = 10;
-                break;
-            default:
-                throw new Exception("Invalid Card Symbol");
+            }
+            default -> throw new Exception("Invalid Card Symbol");
         }
 
         switch (suit) {
-            case "Heart":
-                this.suit = suit;
-                break;
-            case "Club":
-                this.suit = suit;
-                break;
-            case "Diamond":
-                this.suit = suit;
-                break;
-            case "Spade":
-                this.suit = suit;
-                break;
-            default:
-                throw new Exception("Invalid Card Suit");
+            case "Heart", "Club", "Diamond", "Spade" -> this.suit = suit;
+            default -> throw new Exception("Invalid Card Suit");
         }
     }
 
@@ -95,7 +70,10 @@ public class Card {
         return suit;
     }
 
-    public void changeAceValue(){
-        this.value = 1;
+    @Override
+    public String toString() {
+
+        return "This is a " + symbol + " of " + suit;
+
     }
 }
