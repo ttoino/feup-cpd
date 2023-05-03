@@ -10,11 +10,16 @@ public class Player {
 
     private int points = 0;
 
-    int hasAce = 0;
+    private int hasAce = 0;
 
-    public Player(boolean isDealer, Deck deck){
+    private final int playerID;
+
+
+    public Player(boolean isDealer, Deck deck, int playerID){
 
         drawnUpCard(deck);
+
+        this.playerID = playerID;
 
         if (!isDealer){
             drawnUpCard(deck);
@@ -46,5 +51,28 @@ public class Player {
             points -= 10;
             hasAce --;
         }
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void printPublicCards(){
+        for (Card card: faceUpCards) {
+            System.out.println(card);
+        }
+    }
+
+    public void printAllCards(){
+        for (Card card: faceUpCards) {
+            System.out.println(card);
+        }
+        for (Card card: faceDownCards) {
+            System.out.println(card);
+        }
+    }
+
+    public int getPlayerID() {
+        return playerID;
     }
 }
