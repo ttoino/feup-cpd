@@ -2,8 +2,9 @@ protected class Card {
 
     String symbol;
     int value;
+    String suit;
 
-    Card(String symbol){
+    Card(String symbol, String suit){
         switch (symbol) {
             case "Ace":
                 this.symbol = symbol;
@@ -45,9 +46,20 @@ protected class Card {
                 this.symbol = symbol;
                 this.value = 10;
             default:
-                throw new Exception("Invalid Card Number");
+                throw new Exception("Invalid Card Symbol");
+        }
 
-
+        switch (suit) {
+            case "Heart":
+                this.suit = suit;
+            case "Club":
+                this.suit = suit;
+            case "Diamond":
+                this.suit = suit;
+            case "Spade":
+                this.suit = suit;
+            default:
+                throw new Exception("Invalid Card Suit");
         }
     }
 
