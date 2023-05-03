@@ -5,12 +5,12 @@ import java.util.*;
 
 public class Deck {
 
-    String[] suits = {"Heart", "Club", "Diamond", "Spade"};
+    private String[] suits = {"Heart", "Club", "Diamond", "Spade"};
 
-    String[] symbols = {"Ace", "2", "3", "5", "6", "7", "8",
+    private String[] symbols = {"Ace", "2", "3", "5", "6", "7", "8",
                         "9", "10", "Jack", "Queen", "King"};
 
-    ArrayList<Card> cardDecks = new ArrayList<Card>();
+    private ArrayList<Card> cardDecks = new ArrayList<Card>();
 
 
     Deck() throws Exception {
@@ -23,8 +23,9 @@ public class Deck {
     }
 
 
-
-
+    public Card drawCard(){
+        return cardDecks.remove(0);
+    }
 }
 
 

@@ -2,9 +2,10 @@ package pt.up.fe.cpd.proj2.Game;
 
 public class Card {
 
-    String symbol;
-    int value;
-    String suit;
+    private String symbol;
+    private int value;
+
+    private String suit;
 
     Card(String symbol, String suit) throws Exception {
         switch (symbol) {
@@ -88,6 +89,10 @@ public class Card {
 
     public int getValue() {
         return value;
+    }
+
+    public String getSuit() {
+        return suit;
     }
 
     public void changeAceValue(){
