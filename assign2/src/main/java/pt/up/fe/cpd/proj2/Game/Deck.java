@@ -5,12 +5,12 @@ import java.util.*;
 
 public class Deck {
 
-    private String[] suits = {"Heart", "Club", "Diamond", "Spade"};
+    private final String[] suits = {"Heart", "Club", "Diamond", "Spade"};
 
-    private String[] symbols = {"Ace", "2", "3", "5", "6", "7", "8",
+    private final String[] symbols = {"Ace", "2", "3", "5", "6", "7", "8",
                         "9", "10", "Jack", "Queen", "King"};
 
-    private ArrayList<Card> cardDecks = new ArrayList<Card>();
+    private ArrayList<Card> cardDecks = new ArrayList<>();
 
 
     public Deck(int nDecks) throws Exception {
