@@ -1,4 +1,4 @@
-public class Card {
+protected class Card {
 
     String symbol;
     int value;
