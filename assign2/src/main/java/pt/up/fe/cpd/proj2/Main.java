@@ -6,6 +6,8 @@ import pt.up.fe.cpd.proj2.server.Server;
 
 import java.io.IOException;
 
+import pt.up.fe.cpd.proj2.Game.*;
+
 public class Main {
     public static void main(String[] args) throws IOException {
         Config.parse(args);
