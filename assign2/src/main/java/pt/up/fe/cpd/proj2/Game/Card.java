@@ -7,7 +7,7 @@ public class Card {
 
     private String suit;
 
-    Card(String symbol, String suit) throws Exception {
+    public Card(String symbol, String suit) throws Exception {
         switch (symbol) {
             case "Ace":
                 this.symbol = symbol;

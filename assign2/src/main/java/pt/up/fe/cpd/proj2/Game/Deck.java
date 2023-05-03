@@ -13,12 +13,15 @@ public class Deck {
     private ArrayList<Card> cardDecks = new ArrayList<Card>();
 
 
-    Deck() throws Exception {
-        for (String suit: suits) {
-            for (String symbol: symbols) {
-                cardDecks.add(new Card(symbol, suit));
+    public Deck(int nDecks) throws Exception {
+        for (int i = 0; i < nDecks; i++) {
+            for (String suit: suits) {
+                for (String symbol: symbols) {
+                    cardDecks.add(new Card(symbol, suit));
+                }
             }
         }
+
         Collections.shuffle(cardDecks);
     }
 
