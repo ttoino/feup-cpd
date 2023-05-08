@@ -17,6 +17,8 @@ public class Config {
 
     private static AppType appType = AppType.CLIENT;
 
+    private static AuthType authType = AuthType.FILE;
+
     private static boolean debug = false;
 
     public static void parse(String[] args) {
@@ -37,6 +39,7 @@ public class Config {
                 case "unranked", "u" -> queueType = QueueType.UNRANKED;
                 case "client", "c" -> appType = AppType.CLIENT;
                 case "server", "s" -> appType = AppType.SERVER;
+                case "user-info-provider", "uip" -> authType = AuthType.valueOf(parsedArg[1].toUpperCase());
                 case "debug", "d" -> debug = true;
             }
         }
@@ -74,6 +77,10 @@ public class Config {
         return appType;
     }
 
+    public static AuthType authType() {
+        return authType;
+    }
+
     public static boolean debug() {
         return debug;
     }
@@ -86,5 +93,9 @@ public class Config {
     public enum QueueType {
         RANKED,
         UNRANKED
+    }
+
+    public enum AuthType {
+        FILE
     }
 }
