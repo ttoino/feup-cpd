@@ -5,10 +5,10 @@ import pt.up.fe.cpd.proj2.common.message.AckMessage;
 import pt.up.fe.cpd.proj2.common.message.Message;
 import pt.up.fe.cpd.proj2.common.message.NackMessage;
 
-public class MainState extends State {
+public class MainState implements State {
     @Override
     public Message run() {
-        var input =  Input.get("Press enter to enter a queue, or type \"exit\" to exit");
+        var input =  Input.getFromOptions("Press enter to enter a queue, or type \"exit\" to exit", "", "exit");
 
         if (input.equals("exit"))
             return new NackMessage();

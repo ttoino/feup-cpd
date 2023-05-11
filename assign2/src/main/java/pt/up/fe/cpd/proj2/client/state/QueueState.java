@@ -3,7 +3,7 @@ package pt.up.fe.cpd.proj2.client.state;
 import pt.up.fe.cpd.proj2.common.message.Message;
 import pt.up.fe.cpd.proj2.common.message.QueueStatusMessage;
 
-public class QueueState extends State {
+public class QueueState implements State {
     @Override
     public Message run() {
         return null;

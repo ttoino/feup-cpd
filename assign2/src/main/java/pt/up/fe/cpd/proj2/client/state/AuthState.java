@@ -3,7 +3,7 @@ package pt.up.fe.cpd.proj2.client.state;
 import pt.up.fe.cpd.proj2.common.Input;
 import pt.up.fe.cpd.proj2.common.message.*;
 
-public class AuthState extends State {
+public class AuthState implements State {
     @Override
     public Message run() {
         var action = Input.getFromOptions("Do you want to register or login? ", "register", "login");

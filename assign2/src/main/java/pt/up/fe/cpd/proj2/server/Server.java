@@ -4,7 +4,11 @@ import pt.up.fe.cpd.proj2.common.Config;
 import pt.up.fe.cpd.proj2.common.Output;
 import pt.up.fe.cpd.proj2.common.message.*;
 import pt.up.fe.cpd.proj2.server.auth.FileUserInfoProvider;
+import pt.up.fe.cpd.proj2.server.auth.UserInfo;
 import pt.up.fe.cpd.proj2.server.auth.UserInfoProvider;
+import pt.up.fe.cpd.proj2.server.queue.RankedUserQueue;
+import pt.up.fe.cpd.proj2.server.queue.SimpleUserQueue;
+import pt.up.fe.cpd.proj2.server.queue.UserQueue;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,6 +24,8 @@ public class Server implements AutoCloseable {
     private final ExecutorService executor;
     private final Selector selector;
     private final UserInfoProvider userInfoProvider;
+    private final UserQueue userQueue;
+    private final Thread userQueueThread;
 
     public Server() throws IOException {
         executor = Executors.newFixedThreadPool(Config.maxGameThreads());
@@ -31,13 +37,21 @@ public class Server implements AutoCloseable {
                 .configureBlocking(false)
                 .register(selector, SelectionKey.OP_ACCEPT);
 
-        switch (Config.authType()) {
-            case FILE -> userInfoProvider = new FileUserInfoProvider("users.txt");
-            default -> throw new RuntimeException("Invalid auth type");
-        }
+        userInfoProvider = switch (Config.authType()) {
+            case FILE -> new FileUserInfoProvider("users.txt");
+        };
+
+        userQueue = switch (Config.queueType()) {
+            case UNRANKED -> new SimpleUserQueue();
+            case RANKED -> new RankedUserQueue();
+        };
+
+        userQueueThread = new Thread(this::runQueue);
     }
 
     public void run() throws IOException {
+        userQueueThread.start();
+
         while (true) {
             selector.select();
             var keys = selector.selectedKeys();
@@ -76,6 +90,23 @@ public class Server implements AutoCloseable {
         }
     }
 
+    private void runQueue() {
+        while (true) {
+            var users = userQueue.nextUsers();
+
+            if (users == null) {
+                try {
+                    Thread.currentThread().wait(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                continue;
+            }
+
+            Output.debug(users.toString());
+        }
+    }
+
     private void handleMessage(Message message, SocketChannel channel, SelectionKey key) throws IOException {
         if (message instanceof NackMessage) {
             Output.debug("Client disconnected by request of user");
@@ -83,7 +114,7 @@ public class Server implements AutoCloseable {
 
         } else if (message instanceof AckMessage) {
             Output.debug("Client entered queue");
-            // TODO
+            userQueue.enqueue((UserInfo) key.attachment(), channel);
 
         } else if (message instanceof AuthMessage authMessage) {
             var username = authMessage.username();
@@ -111,6 +142,7 @@ public class Server implements AutoCloseable {
     public void close() throws Exception {
         executor.shutdown();
         selector.close();
+        userQueueThread.interrupt();
 
         if (userInfoProvider instanceof AutoCloseable autoCloseable)
             autoCloseable.close();
