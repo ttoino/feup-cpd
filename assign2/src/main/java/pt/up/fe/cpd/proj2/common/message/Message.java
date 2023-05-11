@@ -13,10 +13,12 @@ public abstract class Message {
         var type = Base64.encode(this.getClass()
                 .getSimpleName()
                 .replace("Message", ""));
-        var s = type + ":" + Arrays.stream(objects)
-                .map(Object::toString)
-                .map(Base64::encode)
-                .collect(Collectors.joining(":"));
+        var s = objects == null
+                ? type
+                : type + ":" + Arrays.stream(objects)
+                    .map(Object::toString)
+                    .map(Base64::encode)
+                    .collect(Collectors.joining(":"));
         return ByteBuffer.wrap(s.getBytes(StandardCharsets.UTF_8));
     }
 

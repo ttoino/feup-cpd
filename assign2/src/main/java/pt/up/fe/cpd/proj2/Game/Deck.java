@@ -1,6 +1,7 @@
 package pt.up.fe.cpd.proj2.Game;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class Deck {

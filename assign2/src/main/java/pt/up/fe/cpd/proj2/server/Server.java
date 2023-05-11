@@ -13,11 +13,10 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server {
+public class Server implements AutoCloseable {
     private final ExecutorService executor;
     private final Selector selector;
     private final UserInfoProvider userInfoProvider;
@@ -78,7 +77,15 @@ public class Server {
     }
 
     private void handleMessage(Message message, SocketChannel channel, SelectionKey key) throws IOException {
-        if (message instanceof AuthMessage authMessage) {
+        if (message instanceof NackMessage) {
+            Output.debug("Client disconnected by request of user");
+            channel.close();
+
+        } else if (message instanceof AckMessage) {
+            Output.debug("Client entered queue");
+            // TODO
+
+        } else if (message instanceof AuthMessage authMessage) {
             var username = authMessage.username();
             var password = authMessage.password();
 
@@ -98,5 +105,14 @@ public class Server {
         } else {
             Output.debug("Unknown message type");
         }
+    }
+
+    @Override
+    public void close() throws Exception {
+        executor.shutdown();
+        selector.close();
+
+        if (userInfoProvider instanceof AutoCloseable autoCloseable)
+            autoCloseable.close();
     }
 }

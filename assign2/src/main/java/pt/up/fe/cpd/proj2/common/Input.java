@@ -22,6 +22,24 @@ public final class Input {
         return get(scanner, prompt);
     }
 
+    public static String getObfuscated(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            System.out.print("\033[8m");
+            String input = scanner.nextLine();
+            System.out.print("\033[0m");
+
+            if (input.length() > 0)
+                return input;
+
+            System.err.println("Invalid input");
+        }
+    }
+
+    public static String getObfuscated(String prompt) {
+        return getObfuscated(scanner, prompt);
+    }
+
     public static String getFromOptions(Scanner scanner, String prompt, String ...options) {
         while (true) {
             System.out.print(prompt);

@@ -70,6 +70,12 @@ public class FileUserInfoProvider implements UserInfoProvider, AutoCloseable {
         var user = new UserInfo(id, username, password, 1000);
         users.add(user);
 
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return user;
     }
 

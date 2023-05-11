@@ -12,8 +12,7 @@ public abstract class AuthMessage extends Message {
     }
 
     public AuthMessage() {
-        this.username = "";
-        this.password = "";
+        this("", "");
     }
 
     public String username() {
