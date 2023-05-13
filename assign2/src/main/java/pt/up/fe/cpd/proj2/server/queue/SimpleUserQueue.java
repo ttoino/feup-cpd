@@ -1,24 +1,20 @@
 package pt.up.fe.cpd.proj2.server.queue;
 
 import pt.up.fe.cpd.proj2.common.Config;
-import pt.up.fe.cpd.proj2.common.message.QueueStatusMessage;
 import pt.up.fe.cpd.proj2.server.auth.UserInfo;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
-public class SimpleUserQueue implements UserQueue {
-    private final Lock lock;
+public class SimpleUserQueue extends AbstractUserQueue {
     private final Condition enoughUsers;
     private final Queue<QueuedUserInfo> queue;
 
     public SimpleUserQueue() {
+        super();
         queue = new LinkedList<>();
-        lock = new ReentrantLock();
         enoughUsers = lock.newCondition();
     }
 
@@ -33,31 +29,21 @@ public class SimpleUserQueue implements UserQueue {
 
     @Override
     public void notifyUsers() throws IOException {
-        var i = 0;
-        var now = new Date();
-
-        lock.lock();
-        var s = queue.size();
-        for (var queuedUserInfo : queue) {
-            var time = (int) (now.getTime() - queuedUserInfo.queueTime().getTime()) / 1000;
-            var message = new QueueStatusMessage(i++, s, time);
-
-            queuedUserInfo.channel().write(message.serialize());
-        }
-        lock.unlock();
+        notifyUsers(queue);
     }
 
     @Override
-    public Collection<UserInfo> nextUsers() {
+    public Collection<QueuedUserInfo> nextUsers() {
         lock.lock();
 
         try {
-            enoughUsers.await();
+            if (queue.size() < Config.maxPlayers())
+                enoughUsers.await();
 
-            var users = new TreeSet<UserInfo>();
+            var users = new TreeSet<QueuedUserInfo>();
             for (var i = 0; i < Config.maxPlayers(); i++) {
                 var queuedUserInfo = queue.remove();
-                users.add(queuedUserInfo.userInfo());
+                users.add(queuedUserInfo);
             }
 
             return users;

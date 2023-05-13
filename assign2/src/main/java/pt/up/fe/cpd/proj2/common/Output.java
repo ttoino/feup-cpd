@@ -16,4 +16,6 @@ public class Output {
         if (Config.debug())
             System.out.println(message);
     }
+
+    private Output() {}
 }

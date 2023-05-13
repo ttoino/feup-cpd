@@ -145,4 +145,6 @@ public final class Input {
     public static boolean getBoolean(String prompt) {
         return getBoolean(scanner, prompt);
     }
+
+    private Input() {}
 }

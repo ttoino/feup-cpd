@@ -96,7 +96,7 @@ public class Server implements AutoCloseable {
 
             if (users == null) {
                 try {
-                    Thread.currentThread().wait(1000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -115,6 +115,7 @@ public class Server implements AutoCloseable {
         } else if (message instanceof AckMessage) {
             Output.debug("Client entered queue");
             userQueue.enqueue((UserInfo) key.attachment(), channel);
+            key.cancel();
 
         } else if (message instanceof AuthMessage authMessage) {
             var username = authMessage.username();

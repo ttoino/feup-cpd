@@ -11,6 +11,8 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+/**
+ */
 public class Client {
     private final SocketChannel channel;
     private State state;

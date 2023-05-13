@@ -13,4 +13,6 @@ public final class Base64 {
     public static String encode(String src) {
         return new String(encoder.encode(src.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
     }
+
+    private Base64() {}
 }

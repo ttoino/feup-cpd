@@ -11,5 +11,5 @@ public interface UserQueue {
 
     void notifyUsers() throws IOException;
 
-    Collection<UserInfo> nextUsers();
+    Collection<QueuedUserInfo> nextUsers();
 }

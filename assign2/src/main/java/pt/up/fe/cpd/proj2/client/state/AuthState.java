@@ -3,6 +3,11 @@ package pt.up.fe.cpd.proj2.client.state;
 import pt.up.fe.cpd.proj2.common.Input;
 import pt.up.fe.cpd.proj2.common.message.*;
 
+/**
+ * Represents the initial authentication state in the client state machine.
+ *
+ * @see pt.up.fe.cpd.proj2.client.Client
+ */
 public class AuthState implements State {
     @Override
     public Message run() {

@@ -3,6 +3,11 @@ package pt.up.fe.cpd.proj2.client.state;
 import pt.up.fe.cpd.proj2.common.message.Message;
 import pt.up.fe.cpd.proj2.common.message.QueueStatusMessage;
 
+/**
+ * Represents the state in the client state machine where the user is in the queue.
+ *
+ * @see pt.up.fe.cpd.proj2.client.Client
+ */
 public class QueueState implements State {
     @Override
     public Message run() {

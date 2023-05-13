@@ -1,6 +1,7 @@
 package pt.up.fe.cpd.proj2.server.auth;
 
 import pt.up.fe.cpd.proj2.common.Base64;
+import pt.up.fe.cpd.proj2.common.Config;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -37,7 +38,7 @@ public class FileUserInfoProvider implements UserInfoProvider, AutoCloseable {
             var id = Integer.parseInt(parts[0]);
             var username = Base64.decode(parts[1]);
             var password = Base64.decode(parts[2]);
-            var elo = Integer.parseInt(parts[3]);
+            var elo = Double.parseDouble(parts[3]);
 
             users.add(new UserInfo(id, username, password, elo));
         }
@@ -67,7 +68,7 @@ public class FileUserInfoProvider implements UserInfoProvider, AutoCloseable {
             return null;
 
         var id = users.size();
-        var user = new UserInfo(id, username, password, 1000);
+        var user = new UserInfo(id, username, password, Config.initialElo());
         users.add(user);
 
         try {

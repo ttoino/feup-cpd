@@ -5,6 +5,11 @@ import pt.up.fe.cpd.proj2.common.message.AckMessage;
 import pt.up.fe.cpd.proj2.common.message.Message;
 import pt.up.fe.cpd.proj2.common.message.NackMessage;
 
+/**
+ * Represents the initial state in the client state machine, after the user has been authenticated.
+ *
+ * @see pt.up.fe.cpd.proj2.client.Client
+ */
 public class MainState implements State {
     @Override
     public Message run() {
