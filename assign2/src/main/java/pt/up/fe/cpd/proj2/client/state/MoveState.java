@@ -12,9 +12,9 @@ public class MoveState extends GameState {
 
     @Override
     public Message run() {
-        super.run();
+        showBoard();
 
-        var input = Input.getFromOptions("Do you want to hit or stand?", "hit", "stand");
+        var input = Input.getFromOptions("\nDo you want to hit or stand? ", "hit", "stand");
         var move = Move.valueOf(input.toUpperCase());
 
         return new MoveMessage(move);

@@ -5,10 +5,7 @@ import pt.up.fe.cpd.proj2.common.message.Message;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.WeakHashMap;
+import java.util.*;
 
 public final class Sockets {
     private static final Map<SocketChannel, Queue<Message>> buffers = new WeakHashMap<>();
@@ -16,6 +13,8 @@ public final class Sockets {
     public static Message read(SocketChannel channel) {
         var queue = buffers.computeIfAbsent(channel, c -> new LinkedList<>());
         var buffer = ByteBuffer.allocate(1024);
+
+        if (queue.size() > 0) return queue.poll();
 
         try {
             var read = channel.read(buffer);
@@ -25,9 +24,8 @@ public final class Sockets {
                 return null;
             }
 
-            if (read == 0) {
-                return null;
-            }
+            if (read == 0)
+                return queue.poll();
 
             buffer.flip();
 
@@ -41,7 +39,6 @@ public final class Sockets {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
 
         return queue.poll();
@@ -49,7 +46,10 @@ public final class Sockets {
 
     public static void write(SocketChannel channel, Message message) {
         try {
-            channel.write(message.serialize());
+            ByteBuffer buffer = message.serialize();
+            buffer = ByteBuffer.allocate(buffer.limit() + 1).put(buffer).put((byte) '\n');
+            buffer.flip();
+            channel.write(buffer);
         } catch (Exception e) {
             e.printStackTrace();
         }

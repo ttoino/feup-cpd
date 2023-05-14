@@ -30,35 +30,21 @@ public class Game {
     public void round() {
         broadcast(new RoundStartMessage());
 
-        for (var player : players) {
+        for (var player : players)
             player.hand().clear();
-        }
-
         dealer.hand().clear();
 
-        for (int i = 0; i < 2; i++) {
-            for (int p = 0; p < players.size(); p++) {
-                var card = deck.draw();
-                players.get(p).hand().add(card);
-                broadcast(new DrawMessage(p, card));
-                sleep(500);
-            }
-        }
+        for (int i = 0; i < 2; i++)
+            for (var player : players)
+                hit(player);
 
-        {
-            var card = deck.draw();
-            dealer.hand().add(card);
-            broadcast(new DrawMessage(-1, card));
-            sleep(500);
-        }
+        hit(dealer);
 
         for (var player : players) {
-            if (player.isBlackjack()) {
+            if (player.hand().score() == 21)
                 player.addPoints(1);
-                continue;
-            }
 
-            loop: while (!player.isBust()) {
+            loop: while (player.hand().score() < 21) {
                 var move = awaitMove(player);
 
                 switch (move) {
@@ -68,32 +54,18 @@ public class Game {
             }
         }
 
-        {
-            var card = deck.draw();
-            dealer.hand().add(card);
-            broadcast(new DrawMessage(-1, card));
-            sleep(500);
-        }
+        hit(dealer);
 
-        while (dealer.score() < 17) {
-            var card = deck.draw();
-            dealer.hand().add(card);
-            broadcast(new DrawMessage(-1, card));
-            sleep(500);
-        }
+        while (dealer.hand().score() < 17)
+            hit(dealer);
 
-        var dealerScore = dealer.score();
+        var dealerScore = dealer.hand().score();
 
         for (var player : players) {
-            if (player.isBust())
+            if (player.hand().score() > 21)
                 continue;
 
-            if (dealer.isBust()) {
-                player.addPoints(1);
-                continue;
-            }
-
-            if (player.score() > dealerScore)
+            if (dealerScore > 21 || player.hand().score() > dealerScore)
                 player.addPoints(1);
         }
 
@@ -104,6 +76,7 @@ public class Game {
         var card = deck.draw();
         player.hand().add(card);
         broadcast(new DrawMessage(players.indexOf(player), card));
+        sleep(500);
     }
 
     private void broadcast(Message message) {
@@ -112,20 +85,17 @@ public class Game {
     }
 
     private Move awaitMove(Player player) {
+        Sockets.write(player.user().channel(), new MoveMessage(Move.HIT));
+
         Move move = null;
 
-        try {
-            Sockets.write(player.user().channel(), new MoveMessage(Move.HIT));
-
+        while (move == null) {
             var message = Sockets.read(player.user().channel());
 
-            if (message == null) {
-                return Move.STAND;
-            } if (message instanceof MoveMessage) {
-                move = ((MoveMessage) message).move();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (message == null)
+                move = Move.STAND;
+            else if (message instanceof MoveMessage moveMessage)
+                move = moveMessage.move();
         }
 
         return move;

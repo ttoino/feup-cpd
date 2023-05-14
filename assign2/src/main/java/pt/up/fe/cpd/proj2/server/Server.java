@@ -14,7 +14,6 @@ import pt.up.fe.cpd.proj2.server.queue.UserQueue;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;

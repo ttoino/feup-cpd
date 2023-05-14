@@ -6,6 +6,7 @@ import pt.up.fe.cpd.proj2.common.message.Message;
 import pt.up.fe.cpd.proj2.common.message.MoveMessage;
 import pt.up.fe.cpd.proj2.common.message.RoundStartMessage;
 import pt.up.fe.cpd.proj2.game.Card;
+import pt.up.fe.cpd.proj2.game.Hand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,14 +26,41 @@ public class GameState implements State {
 
     @Override
     public Message run() {
-        Output.clear();
-        System.out.println("Dealer: " + displayHand(gameInfo.dealer.hand()));
-
-        for (var player : gameInfo.players) {
-            System.out.println(player.name() + ": " + displayHand(player.hand()));
-        }
-
+        showBoard();
         return null;
+    }
+
+    protected void showBoard() {
+        var width = gameInfo.players.size() * 15;
+
+        Output.clear();
+        System.out.println("┌" + "─".repeat(width) + "┐");
+        System.out.println("│" + Output.centered("Dealer", width) + "│");
+        System.out.println("│" + Output.centered(showHand(gameInfo.dealer.hand()), width) + "│");
+        System.out.println("│" + Output.centered(showScore(gameInfo.dealer.hand().score()), width) + "│");
+
+        System.out.println("│" + " ".repeat(width) + "│");
+
+        System.out.println("│" + Output.centered(gameInfo.players.stream().map(p -> Output.centered(p.name, 11)).collect(Collectors.joining("    ")), width) + "│");
+        System.out.println("│" + Output.centered(gameInfo.players.stream().map(p -> showHand(p.hand)).collect(Collectors.joining("    ")), width) + "│");
+        System.out.println("│" + Output.centered(gameInfo.players.stream().map(p -> showScore(p.hand.score())).collect(Collectors.joining("    ")), width) + "│");
+
+        System.out.println("└" + "─".repeat(width) + "┘");
+    }
+
+    protected String showHand(Hand hand) {
+        return Output.centered(hand.stream().map(Card::display).collect(Collectors.joining(hand.size() > 6 ? "" : " ")), 11);
+    }
+
+    protected String showScore(int score) {
+        var s = String.valueOf(score);
+
+        if (score == 21)
+            s = "Blackjack";
+        else if (score > 21)
+            s = "Bust!";
+
+        return Output.centered(s, 11);
     }
 
     @Override
@@ -54,21 +82,17 @@ public class GameState implements State {
         return new GameState(gameInfo);
     }
 
-    protected String displayHand(List<Card> hand) {
-        return hand.stream().map(Card::display).collect(Collectors.joining(" "));
-    }
-
     protected record GameInfo(PlayerInfo dealer, List<PlayerInfo> players) {
     }
 
     protected static final class PlayerInfo {
         private final String name;
-        private final List<Card> hand;
+        private final Hand hand;
         private int points;
 
         public PlayerInfo(String name) {
             this.name = name;
-            this.hand = new ArrayList<>();
+            this.hand = new Hand();
             this.points = 0;
         }
 
@@ -76,7 +100,7 @@ public class GameState implements State {
             return name;
         }
 
-        public List<Card> hand() {
+        public Hand hand() {
             return hand;
         }
 
