@@ -1,6 +1,7 @@
 package pt.up.fe.cpd.proj2.common.message;
 
 import pt.up.fe.cpd.proj2.common.Base64;
+import pt.up.fe.cpd.proj2.common.Output;
 
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
@@ -26,8 +27,7 @@ public abstract class Message {
 
     public abstract ByteBuffer serialize();
 
-    public static Message deserialize(ByteBuffer buffer) {
-        String s = StandardCharsets.UTF_8.decode(buffer).toString();
+    public static Message deserialize(String s) {
         String[] parts = Arrays.stream(s.split(":")).map(Base64::decode).toArray(String[]::new);
 
         try {
@@ -37,7 +37,9 @@ public abstract class Message {
             return message;
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException |
                  IllegalAccessException | InvocationTargetException e) {
-            throw new InvalidMessageException("Invalid message type", e);
+            Output.debug("Failed to deserialize message: " + s);
+            e.printStackTrace();
+            return null;
         }
     }
 }

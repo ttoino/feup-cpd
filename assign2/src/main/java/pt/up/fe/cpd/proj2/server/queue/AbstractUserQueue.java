@@ -1,5 +1,6 @@
 package pt.up.fe.cpd.proj2.server.queue;
 
+import pt.up.fe.cpd.proj2.common.Sockets;
 import pt.up.fe.cpd.proj2.common.message.QueueStatusMessage;
 
 import java.io.IOException;
@@ -15,17 +16,17 @@ public abstract class AbstractUserQueue implements UserQueue {
         lock = new ReentrantLock();
     }
 
-    protected void notifyUsers(Collection<QueuedUserInfo> users) throws IOException {
+    protected void notifyUsers(Collection<QueuedUser> users) throws IOException {
         var i = 0;
         var now = new Date();
 
         lock.lock();
         var s = users.size();
-        for (var queuedUserInfo : users) {
-            var time = (int) (now.getTime() - queuedUserInfo.queueTime().getTime()) / 1000;
+        for (var queuedUser : users) {
+            var time = (int) (now.getTime() - queuedUser.queueTime().getTime()) / 1000;
             var message = new QueueStatusMessage(i++, s, time);
 
-            queuedUserInfo.channel().write(message.serialize());
+            Sockets.write(queuedUser.user().channel(), message);
         }
         lock.unlock();
     }

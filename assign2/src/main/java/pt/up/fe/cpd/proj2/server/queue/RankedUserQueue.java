@@ -1,29 +1,28 @@
 package pt.up.fe.cpd.proj2.server.queue;
 
 import pt.up.fe.cpd.proj2.common.Config;
-import pt.up.fe.cpd.proj2.server.auth.UserInfo;
+import pt.up.fe.cpd.proj2.server.User;
 
 import java.io.IOException;
-import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.locks.Condition;
 
 public class RankedUserQueue extends AbstractUserQueue {
     private final Condition enoughUsers;
-    private final NavigableSet<QueuedUserInfo> setByTime;
-    private final NavigableSet<QueuedUserInfo> setByElo;
+    private final NavigableSet<QueuedUser> setByTime;
+    private final NavigableSet<QueuedUser> setByElo;
 
     public RankedUserQueue() {
         super();
         setByTime = new TreeSet<>();
-        setByElo = new TreeSet<>((a, b) -> (int) Math.ceil(a.userInfo().elo() - b.userInfo().elo()));
+        setByElo = new TreeSet<>((a, b) -> (int) Math.ceil(a.user().info().elo() - b.user().info().elo()));
         enoughUsers = lock.newCondition();
     }
 
     @Override
-    public void enqueue(UserInfo userInfo, SocketChannel channel) {
+    public void enqueue(User user) {
         lock.lock();
-        var info = new QueuedUserInfo(userInfo, channel, new Date());
+        var info = new QueuedUser(user, new Date());
         setByTime.add(info);
         setByElo.add(info);
         if (setByTime.size() >= Config.maxPlayers())
@@ -37,7 +36,7 @@ public class RankedUserQueue extends AbstractUserQueue {
     }
 
     @Override
-    public Collection<QueuedUserInfo> nextUsers() {
+    public List<User> nextUsers() {
         lock.lock();
 
         try {
@@ -58,25 +57,27 @@ public class RankedUserQueue extends AbstractUserQueue {
         }
     }
 
-    private Collection<QueuedUserInfo> tryNextUsers(QueuedUserInfo pivot) {
-        var elo = pivot.userInfo().elo();
+    private List<User> tryNextUsers(QueuedUser pivot) {
+        var elo = pivot.user().info().elo();
         var impatience = impatience(pivot);
 
         var nextUp = setByElo.higher(pivot);
         var nextDown = setByElo.lower(pivot);
 
-        var users = new ArrayList<QueuedUserInfo>(Config.maxPlayers());
-        users.add(pivot);
+        var users = new ArrayList<User>(Config.maxPlayers());
+        users.add(pivot.user());
 
         while ((nextUp != null || nextDown != null) && users.size() < Config.maxPlayers()) {
-            var eloUp = nextUp == null ? Double.POSITIVE_INFINITY : nextUp.userInfo().elo();
-            var eloDown = nextDown == null ? Double.NEGATIVE_INFINITY : nextDown.userInfo().elo();
+            var eloUp = nextUp == null ? Double.POSITIVE_INFINITY : nextUp.user().info().elo();
+            var eloDown = nextDown == null ? Double.NEGATIVE_INFINITY : nextDown.user().info().elo();
 
             if (eloUp - elo < elo - eloDown) {
                 var impatienceUp = impatience(nextUp);
 
                 if (elo + impatience >= eloUp - impatienceUp) {
-                    users.add(nextUp);
+                    users.add(nextUp.user());
+                    setByTime.remove(nextUp);
+                    setByElo.remove(nextUp);
                 } else {
                     nextUp = setByElo.higher(nextUp);
                 }
@@ -84,24 +85,23 @@ public class RankedUserQueue extends AbstractUserQueue {
                 var impatienceDown = impatience(nextDown);
 
                 if (elo - impatience <= eloDown + impatienceDown) {
-                    users.add(nextDown);
+                    users.add(nextDown.user());
+                    setByTime.remove(nextDown);
+                    setByElo.remove(nextDown);
                 } else {
                     nextDown = setByElo.lower(nextDown);
                 }
             }
         }
 
-        if (users.size() == Config.maxPlayers()) {
-            users.forEach(setByTime::remove);
-            users.forEach(setByElo::remove);
+        if (users.size() == Config.maxPlayers())
             return users;
-        } else {
+        else
             return null;
-        }
     }
 
-    private double impatience(QueuedUserInfo info) {
-        var time = (double) Math.min((new Date().getTime() - info.queueTime().getTime()) / 1000, Config.maxQueueTime());
+    private double impatience(QueuedUser user) {
+        var time = (double) Math.min((new Date().getTime() - user.queueTime().getTime()) / 1000, Config.maxQueueTime());
         return Config.eloThreshold() / 2.0 * time / Config.maxQueueTime();
     }
 }

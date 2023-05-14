@@ -1,16 +1,15 @@
 package pt.up.fe.cpd.proj2.server.queue;
 
 import pt.up.fe.cpd.proj2.common.Config;
-import pt.up.fe.cpd.proj2.server.auth.UserInfo;
+import pt.up.fe.cpd.proj2.server.User;
 
 import java.io.IOException;
-import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.locks.Condition;
 
 public class SimpleUserQueue extends AbstractUserQueue {
     private final Condition enoughUsers;
-    private final Queue<QueuedUserInfo> queue;
+    private final Queue<QueuedUser> queue;
 
     public SimpleUserQueue() {
         super();
@@ -19,9 +18,9 @@ public class SimpleUserQueue extends AbstractUserQueue {
     }
 
     @Override
-    public void enqueue(UserInfo userInfo, SocketChannel channel) {
+    public void enqueue(User user) {
         lock.lock();
-        queue.add(new QueuedUserInfo(userInfo, channel, new Date()));
+        queue.add(new QueuedUser(user, new Date()));
         if (queue.size() >= Config.maxPlayers())
             enoughUsers.signal();
         lock.unlock();
@@ -33,17 +32,17 @@ public class SimpleUserQueue extends AbstractUserQueue {
     }
 
     @Override
-    public Collection<QueuedUserInfo> nextUsers() {
+    public List<User> nextUsers() {
         lock.lock();
 
         try {
             if (queue.size() < Config.maxPlayers())
                 enoughUsers.await();
 
-            var users = new TreeSet<QueuedUserInfo>();
+            var users = new ArrayList<User>();
             for (var i = 0; i < Config.maxPlayers(); i++) {
                 var queuedUserInfo = queue.remove();
-                users.add(queuedUserInfo);
+                users.add(queuedUserInfo.user());
             }
 
             return users;

@@ -16,6 +16,10 @@ public class Config {
      */
     private static int maxPlayers = 2;
 
+    private static int decks = 2;
+
+    private static int maxPoints = 21;
+
     /**
      * The maximum number of game threads (and thus games).
      */
@@ -92,6 +96,8 @@ public class Config {
                 case "port", "p" -> port = Integer.parseInt(parsedArg[1]);
                 case "host", "h" -> host = parsedArg[1];
                 case "max-players", "mp" -> maxPlayers = Integer.parseInt(parsedArg[1]);
+                case "decks", "nd" -> decks = Integer.parseInt(parsedArg[1]);
+                case "max-points", "mpt" -> maxPoints = Integer.parseInt(parsedArg[1]);
                 case "max-game-threads", "mg" -> maxGameThreads = Integer.parseInt(parsedArg[1]);
                 case "max-queue-size", "mq" -> maxQueueSize = Integer.parseInt(parsedArg[1]);
                 case "max-queue-time", "mt" -> maxQueueTime = Integer.parseInt(parsedArg[1]);
@@ -129,6 +135,14 @@ public class Config {
      */
     public static int maxPlayers() {
         return maxPlayers;
+    }
+
+    public static int decks() {
+        return decks;
+    }
+
+    public static int maxPoints() {
+        return maxPoints;
     }
 
     /**
