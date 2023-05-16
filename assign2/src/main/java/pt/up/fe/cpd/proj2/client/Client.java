@@ -32,7 +32,6 @@ public class Client {
                 Sockets.write(channel, message);
 
             var response = Sockets.read(channel);
-            System.err.println(response);
             state = state.handle(response);
         }
     }

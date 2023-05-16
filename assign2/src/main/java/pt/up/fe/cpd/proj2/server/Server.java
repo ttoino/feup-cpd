@@ -56,6 +56,7 @@ public class Server implements AutoCloseable {
 
         while (true) {
             selector.select();
+            Output.debug("andjknsdjksd");
             var keys = selector.selectedKeys();
 
             for (var key : keys) {
@@ -94,7 +95,7 @@ public class Server implements AutoCloseable {
                 try {
                     Thread.sleep(1000);
                     userQueue.notifyUsers();
-                } catch (InterruptedException | IOException e) {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 continue;
@@ -109,7 +110,7 @@ public class Server implements AutoCloseable {
             try {
                 user.channel().configureBlocking(true);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
 

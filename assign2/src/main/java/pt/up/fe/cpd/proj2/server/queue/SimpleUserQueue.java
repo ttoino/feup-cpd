@@ -3,50 +3,55 @@ package pt.up.fe.cpd.proj2.server.queue;
 import pt.up.fe.cpd.proj2.common.Config;
 import pt.up.fe.cpd.proj2.server.User;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.locks.Condition;
 
 public class SimpleUserQueue extends AbstractUserQueue {
-    private final Condition enoughUsers;
-    private final Queue<QueuedUser> queue;
 
     public SimpleUserQueue() {
         super();
-        queue = new LinkedList<>();
-        enoughUsers = lock.newCondition();
     }
 
     @Override
     public void enqueue(User user) {
         lock.lock();
-        queue.add(new QueuedUser(user, new Date()));
-        if (queue.size() >= Config.maxPlayers())
-            enoughUsers.signal();
+        var info = new QueuedUser(user, new Date());
+
+        var oldInfo = queue.remove(info);
+
+        if (oldInfo != null)
+            info = new QueuedUser(user, oldInfo.queueTime());
+
+        queue.put(info, info);
         lock.unlock();
     }
 
     @Override
-    public void notifyUsers() throws IOException {
-        notifyUsers(queue);
-    }
-
-    @Override
     public List<User> nextUsers() {
-        lock.lock();
-
         try {
-            if (queue.size() < Config.maxPlayers())
-                enoughUsers.await();
+            lock.lock();
 
-            var users = new ArrayList<User>();
-            for (var i = 0; i < Config.maxPlayers(); i++) {
-                var queuedUserInfo = queue.remove();
-                users.add(queuedUserInfo.user());
+            if (queue.size() < Config.maxPlayers())
+                return null;
+
+            var users = new ArrayList<QueuedUser>();
+
+            for (var pivot : queue.values()) {
+                if (!pivot.user().channel().isOpen()) {
+                    if (pivot.queueTime().getTime() - new Date().getTime() > Config.maxQueueTime() * 2000L) {
+                        queue.remove(pivot);
+                    }
+
+                    continue;
+                }
+
+                users.add(pivot);
+
+                if (users.size() == Config.maxPlayers()) {
+                    users.forEach(queue::remove);
+                    return users.stream().map(QueuedUser::user).toList();
+                }
             }
 
-            return users;
-        } catch (InterruptedException e) {
             return null;
         } finally {
             lock.unlock();

@@ -3,54 +3,58 @@ package pt.up.fe.cpd.proj2.server.queue;
 import pt.up.fe.cpd.proj2.common.Config;
 import pt.up.fe.cpd.proj2.server.User;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.locks.Condition;
 
 public class RankedUserQueue extends AbstractUserQueue {
-    private final Condition enoughUsers;
-    private final NavigableSet<QueuedUser> setByTime;
-    private final NavigableSet<QueuedUser> setByElo;
+    private final NavigableMap<QueuedUser, QueuedUser> queueByElo;
 
     public RankedUserQueue() {
         super();
-        setByTime = new TreeSet<>();
-        setByElo = new TreeSet<>((a, b) -> (int) Math.ceil(a.user().info().elo() - b.user().info().elo()));
-        enoughUsers = lock.newCondition();
+        queueByElo = new TreeMap<>((a, b) -> {
+            if (a.user().info().elo() == b.user().info().elo())
+                return Integer.compare(a.user().info().id(), b.user().info().id());
+
+            return Double.compare(a.user().info().elo(), b.user().info().elo());
+        });
     }
 
     @Override
     public void enqueue(User user) {
         lock.lock();
         var info = new QueuedUser(user, new Date());
-        setByTime.add(info);
-        setByElo.add(info);
-        if (setByTime.size() >= Config.maxPlayers())
-            enoughUsers.signal();
+
+        var oldInfo = queueByElo.remove(info);
+
+        if (oldInfo != null) {
+            queue.remove(oldInfo);
+            info = new QueuedUser(user, oldInfo.queueTime());
+        }
+
+        queue.put(info, info);
+        queueByElo.put(info, info);
         lock.unlock();
     }
 
     @Override
-    public void notifyUsers() throws IOException {
-        notifyUsers(setByTime);
-    }
-
-    @Override
     public List<User> nextUsers() {
-        lock.lock();
-
         try {
-            if (setByTime.size() < Config.maxPlayers())
-                enoughUsers.await();
+            lock.lock();
 
-            for (var pivot : setByTime) {
+            for (var pivot : queue.values()) {
+                if (!pivot.user().channel().isOpen()) {
+                    if (pivot.queueTime().getTime() - new Date().getTime() > Config.maxQueueTime() * 2000L) {
+                        queue.remove(pivot);
+                        queueByElo.remove(pivot);
+                    }
+
+                    continue;
+                }
+
                 var users = tryNextUsers(pivot);
                 if (users != null)
                     return users;
             }
 
-            return null;
-        } catch (InterruptedException e) {
             return null;
         } finally {
             lock.unlock();
@@ -61,8 +65,8 @@ public class RankedUserQueue extends AbstractUserQueue {
         var elo = pivot.user().info().elo();
         var impatience = impatience(pivot);
 
-        var nextUp = setByElo.higher(pivot);
-        var nextDown = setByElo.lower(pivot);
+        var nextUp = queueByElo.higherKey(pivot);
+        var nextDown = queueByElo.lowerKey(pivot);
 
         var users = new ArrayList<User>(Config.maxPlayers());
         users.add(pivot.user());
@@ -74,23 +78,23 @@ public class RankedUserQueue extends AbstractUserQueue {
             if (eloUp - elo < elo - eloDown) {
                 var impatienceUp = impatience(nextUp);
 
-                if (elo + impatience >= eloUp - impatienceUp) {
+                if (elo + impatience >= eloUp - impatienceUp && nextUp.user().channel().isOpen()) {
                     users.add(nextUp.user());
-                    setByTime.remove(nextUp);
-                    setByElo.remove(nextUp);
-                } else {
-                    nextUp = setByElo.higher(nextUp);
+                    queue.remove(nextUp);
+                    queueByElo.remove(nextUp);
                 }
+
+                nextUp = queueByElo.higherKey(nextUp);
             } else {
                 var impatienceDown = impatience(nextDown);
 
-                if (elo - impatience <= eloDown + impatienceDown) {
+                if (elo - impatience <= eloDown + impatienceDown && nextDown.user().channel().isOpen()) {
                     users.add(nextDown.user());
-                    setByTime.remove(nextDown);
-                    setByElo.remove(nextDown);
-                } else {
-                    nextDown = setByElo.lower(nextDown);
+                    queue.remove(nextDown);
+                    queueByElo.remove(nextDown);
                 }
+
+                nextDown = queueByElo.lowerKey(nextDown);
             }
         }
 
