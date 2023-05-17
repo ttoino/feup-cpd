@@ -8,6 +8,7 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Arrays;
 
 public final class Password {
     private static final SecureRandom random = new SecureRandom();
@@ -44,7 +45,7 @@ public final class Password {
         var salt = new byte[16];
         System.arraycopy(hash, 0, salt, 0, 16);
         var hashed = hash(password, salt);
-        return hash.equals(hashed);
+        return Arrays.equals(hash, hashed);
     }
 
     private Password() {}

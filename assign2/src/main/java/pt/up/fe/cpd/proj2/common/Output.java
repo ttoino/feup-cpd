@@ -1,6 +1,8 @@
 package pt.up.fe.cpd.proj2.common;
 
+import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.channels.SocketChannel;
 import java.util.stream.Collectors;
 
 public class Output {
@@ -16,6 +18,14 @@ public class Output {
     public static void debug(String message) {
         if (Config.debug())
             System.out.println(message);
+    }
+
+    public static void debug(SocketChannel channel, String message) {
+        try {
+            debug("[" + channel.getRemoteAddress() + "] " + message);
+        } catch (IOException e) {
+            debug(message);
+        }
     }
 
     public static String centered(String s, int width) {

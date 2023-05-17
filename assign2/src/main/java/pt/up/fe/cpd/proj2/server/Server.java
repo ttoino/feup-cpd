@@ -21,6 +21,7 @@ import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class Server implements AutoCloseable {
     private final ExecutorService executor;
@@ -61,23 +62,24 @@ public class Server implements AutoCloseable {
             for (var key : keys) {
                 if (key.isAcceptable()) {
                     Output.debug("Accepting client");
-                    var channel = key.channel();
+                    var serverChannel = key.channel();
 
-                    ((ServerSocketChannel) channel).accept()
-                            .configureBlocking(false)
-                            .register(selector, SelectionKey.OP_READ);
-                    Output.debug("Client connected");
+                    var channel = ((ServerSocketChannel) serverChannel).accept();
+                    channel.configureBlocking(false).register(selector, SelectionKey.OP_READ);
+                    Output.debug(channel, "Connected");
 
                 } else if (key.isReadable()) {
-                    Message message = Sockets.read((SocketChannel) key.channel());
+                    var channel = (SocketChannel) key.channel();
+
+                    Message message = Sockets.read(channel);
 
                     while (message != null) {
-                        handleMessage(message, (SocketChannel) key.channel(), key);
-                        message = Sockets.read((SocketChannel) key.channel());
+                        handleMessage(message, channel, key);
+                        message = Sockets.read(channel);
                     }
 
-                    if (!((SocketChannel) key.channel()).isConnected())
-                        Output.debug("Client disconnected");
+                    if (!channel.isConnected())
+                        Output.debug(channel, "Disconnected");
                 }
             }
 
@@ -99,8 +101,6 @@ public class Server implements AutoCloseable {
                 }
                 continue;
             }
-
-            Output.debug(users.toString());
         }
     }
 
@@ -113,7 +113,7 @@ public class Server implements AutoCloseable {
             }
         }
 
-        Output.debug("Starting game with " + users.size() + " players");
+        Output.debug("Starting game with " + users.size() + " players: " + users.stream().map(u -> u.info().username()).collect(Collectors.joining(", ")));
 
         var game = new Game(users);
         game.run();
@@ -131,17 +131,17 @@ public class Server implements AutoCloseable {
 
     private void handleMessage(Message message, SocketChannel channel, SelectionKey key) throws IOException {
         if (message instanceof NackMessage) {
-            Output.debug("Client disconnected by request of user");
+            Output.debug(channel, "Disconnected by request of user");
             channel.close();
 
         } else if (message instanceof AckMessage) {
 
             if (key.attachment() == null || !(key.attachment() instanceof UserInfo)) {
-                Output.debug("Client not logged in");
+                Output.debug(channel, "Tried to enter queue without being authed");
                 return;
             }
 
-            Output.debug("Client entered queue");
+            Output.debug(channel, "Entered queue");
             userQueue.enqueue(new User((UserInfo) key.attachment(), channel));
             Sockets.write(channel, new AckMessage());
             key.cancel();
@@ -157,14 +157,14 @@ public class Server implements AutoCloseable {
 
             if (user != null) {
                 Sockets.write(channel, new AckMessage());
-                Output.debug("User " + username + " logged in");
+                Output.debug(channel, "Logged in as '" + username + "'");
             } else {
                 Sockets.write(channel, new NackMessage());
-                Output.debug("User " + username + " failed to log in");
+                Output.debug(channel, "Failed to login as '" + username + "'");
             }
 
         } else {
-            Output.debug("Unknown message type");
+            Output.debug(channel, "Sent invalid message");
         }
     }
 
