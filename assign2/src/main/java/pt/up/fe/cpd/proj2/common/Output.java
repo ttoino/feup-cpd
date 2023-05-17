@@ -20,7 +20,7 @@ public class Output {
 
     public static String centered(String s, int width) {
         int len = s.codePointCount(0, s.length());
-        if (s.codePointCount(0, s.length()) >= width) {
+        if (len >= width) {
             s = s.codePoints().limit(width - 1).mapToObj(Character::toString).collect(Collectors.joining()) + "…";
             len = width;
         }

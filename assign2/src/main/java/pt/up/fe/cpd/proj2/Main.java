@@ -16,6 +16,7 @@ public class Main {
                 try (var server = new Server()) {
                     server.run();
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }

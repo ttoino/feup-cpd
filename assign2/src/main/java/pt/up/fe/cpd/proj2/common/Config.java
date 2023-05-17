@@ -60,6 +60,8 @@ public class Config {
      */
     private static double eloThreshold = 800;
 
+    private static String authFile = "auth.users";
+
     /**
      * The type of queue to use.
      */
@@ -106,6 +108,7 @@ public class Config {
                 case "alpha-factor", "af" -> alphaFactor = Double.parseDouble(parsedArg[1]);
                 case "initial-elo", "ie" -> initialElo = Double.parseDouble(parsedArg[1]);
                 case "elo-threshold", "et" -> eloThreshold = Double.parseDouble(parsedArg[1]);
+                case "auth-file", "fp" -> authFile = parsedArg[1];
                 case "ranked", "r" -> queueType = QueueType.RANKED;
                 case "unranked", "u" -> queueType = QueueType.UNRANKED;
                 case "client", "c" -> appType = AppType.CLIENT;
@@ -199,6 +202,10 @@ public class Config {
      */
     public static double eloThreshold() {
         return eloThreshold;
+    }
+
+    public static String authFile() {
+        return authFile;
     }
 
     /**

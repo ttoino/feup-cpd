@@ -4,8 +4,14 @@ import java.util.*;
 
 public class Deck {
     private final List<Card> decks = new ArrayList<>();
+    private final int nDecks;
 
     public Deck(int nDecks) {
+        this.nDecks = nDecks;
+        generate();
+    }
+
+    private void generate() {
         for (int i = 0; i < nDecks; i++)
             for (var suit : Card.Suit.values())
                 for (var symbol : Card.Symbol.values())
@@ -15,6 +21,9 @@ public class Deck {
     }
 
     public Card draw() {
+        if (decks.isEmpty())
+            generate();
+
         return decks.remove(decks.size() - 1);
     }
 }

@@ -10,8 +10,16 @@ public final class Base64 {
         return new String(decoder.decode(encoded.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
     }
 
+    public static byte[] decodeBytes(String encoded) {
+        return decoder.decode(encoded.getBytes(StandardCharsets.UTF_8));
+    }
+
     public static String encode(String src) {
         return new String(encoder.encode(src.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+    }
+
+    public static String encode(byte[] src) {
+        return new String(encoder.encode(src), StandardCharsets.UTF_8);
     }
 
     private Base64() {}

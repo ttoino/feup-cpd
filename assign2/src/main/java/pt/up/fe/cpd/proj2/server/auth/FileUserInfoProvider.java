@@ -5,6 +5,7 @@ import pt.up.fe.cpd.proj2.common.Config;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
@@ -12,35 +13,38 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeSet;
 
 public class FileUserInfoProvider implements UserInfoProvider, AutoCloseable {
     private final FileChannel fileChannel;
 
-    private final Collection<UserInfo> users;
+    private final Set<UserInfo> users;
 
-    public FileUserInfoProvider(String filename) throws IOException {
-        fileChannel = FileChannel.open(Path.of(filename), StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
+    public FileUserInfoProvider() throws IOException {
+        fileChannel = FileChannel.open(Path.of(Config.authFile()), StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
         users = load();
     }
 
-    private Collection<UserInfo> load() throws IOException {
+    private Set<UserInfo> load() throws IOException {
         var users = new TreeSet<UserInfo>();
 
         fileChannel.position(0);
+        long id = 0;
         var stream = Channels.newInputStream(fileChannel);
-        var scanner = new Scanner(stream, StandardCharsets.UTF_8);
 
-        while (scanner.hasNextLine()) {
-            var line = scanner.nextLine();
-            var parts = line.split(":");
+        while (stream.available() > 0) {
+            var bUsername = stream.readNBytes(64);
+            var bPassword = stream.readNBytes(32);
+            var bElo = stream.readNBytes(8);
+            var bNl = stream.read();
 
-            var id = Integer.parseInt(parts[0]);
-            var username = Base64.decode(parts[1]);
-            var password = Base64.decode(parts[2]);
-            var elo = Double.parseDouble(parts[3]);
+            assert bNl == '\n';
 
-            users.add(new UserInfo(id, username, password, elo));
+            var username = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(bUsername)).toString().trim();
+            var elo = ByteBuffer.wrap(bElo).getDouble();
+
+            users.add(new UserInfo(id++, username, bPassword, elo));
         }
 
         return users;
@@ -56,10 +60,16 @@ public class FileUserInfoProvider implements UserInfoProvider, AutoCloseable {
 
     @Override
     public UserInfo login(String username, String password) {
-        return users.stream()
-                .filter(user -> user.username().equals(username) && user.password().equals(password))
+        var user =  users.stream()
+                .filter(u -> u.username().equals(username))
                 .findFirst()
                 .orElse(null);
+
+        if (user == null) return null;
+
+        if (!Password.verify(password, user.password())) return null;
+
+        return user;
     }
 
     @Override
@@ -67,12 +77,17 @@ public class FileUserInfoProvider implements UserInfoProvider, AutoCloseable {
         if (users.stream().anyMatch(user -> user.username().equals(username)))
             return null;
 
+        if (username.isBlank() || password.isBlank() || StandardCharsets.UTF_8.encode(username).limit() > 64)
+            return null;
+
+        var hash = Password.hash(password, Password.generateSalt());
+
         var id = users.size();
-        var user = new UserInfo(id, username, password, Config.initialElo());
+        var user = new UserInfo(id, username, hash, Config.initialElo());
         users.add(user);
 
         try {
-            save();
+            saveUser(user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,16 +95,47 @@ public class FileUserInfoProvider implements UserInfoProvider, AutoCloseable {
         return user;
     }
 
-    public void save() throws IOException {
-        fileChannel.position(0);
+    @Override
+    public UserInfo update(UserInfo user) {
+        users.remove(user);
+        users.add(user);
 
-        var out = Channels.newOutputStream(fileChannel);
-        var stream = new PrintStream(out, false, StandardCharsets.UTF_8);
-
-        for (var user : users) {
-            stream.println(user.id() + ":" + Base64.encode(user.username()) + ":" + Base64.encode(user.password()) + ":" + user.elo());
+        try {
+            saveUser(user);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        stream.flush();
+        return user;
+    }
+
+    private void save() throws IOException {
+        fileChannel.position(0);
+
+        var buffer = ByteBuffer.allocate(1024);
+
+        for (var user : users) {
+            buffer.clear();
+            writeUser(user, buffer);
+        }
+    }
+
+    private void saveUser(UserInfo user) throws IOException {
+        fileChannel.position(user.id() * 105);
+
+        var buffer = ByteBuffer.allocate(1024);
+
+        writeUser(user, buffer);
+    }
+
+    private void writeUser(UserInfo user, ByteBuffer buffer) throws IOException {
+        buffer.put(StandardCharsets.UTF_8.encode(user.username()));
+        buffer.put(new byte[64 - user.username().length()]);
+        buffer.put(user.password());
+        buffer.putDouble(user.elo());
+        buffer.put((byte) '\n');
+        buffer.flip();
+
+        fileChannel.write(buffer);
     }
 }

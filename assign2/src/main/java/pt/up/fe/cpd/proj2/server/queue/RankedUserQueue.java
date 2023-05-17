@@ -12,7 +12,7 @@ public class RankedUserQueue extends AbstractUserQueue {
         super();
         queueByElo = new TreeMap<>((a, b) -> {
             if (a.user().info().elo() == b.user().info().elo())
-                return Integer.compare(a.user().info().id(), b.user().info().id());
+                return Long.compare(a.user().info().id(), b.user().info().id());
 
             return Double.compare(a.user().info().elo(), b.user().info().elo());
         });

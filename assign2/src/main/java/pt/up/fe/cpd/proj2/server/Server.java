@@ -40,7 +40,7 @@ public class Server implements AutoCloseable {
                 .register(selector, SelectionKey.OP_ACCEPT);
 
         userInfoProvider = switch (Config.authType()) {
-            case FILE -> new FileUserInfoProvider("users.txt");
+            case FILE -> new FileUserInfoProvider();
         };
 
         userQueue = switch (Config.queueType()) {
@@ -56,7 +56,6 @@ public class Server implements AutoCloseable {
 
         while (true) {
             selector.select();
-            Output.debug("andjknsdjksd");
             var keys = selector.selectedKeys();
 
             for (var key : keys) {

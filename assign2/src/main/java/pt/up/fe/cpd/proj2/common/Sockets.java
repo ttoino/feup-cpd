@@ -44,7 +44,7 @@ public final class Sockets {
             }
 
             for (var p : parts) {
-                if (s.isBlank()) continue;
+                if (p.isBlank()) continue;
                 var message = Message.deserialize(p);
                 if (message != null) queue.add(message);
             }
