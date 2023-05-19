@@ -34,18 +34,18 @@ public class GameState implements State {
         var width = gameInfo.players.size() * 15;
 
         Output.clear();
-        System.out.println("┌" + "─".repeat(width) + "┐");
-        System.out.println("│" + Output.centered("Dealer", width) + "│");
-        System.out.println("│" + Output.centered(showHand(gameInfo.dealer.hand()), width) + "│");
-        System.out.println("│" + Output.centered(showScore(gameInfo.dealer.hand().score()), width) + "│");
+        System.out.println("\u256D" + "\u2500".repeat(width) + "\u256E");
+        System.out.println("\u2502" + Output.centered("Dealer", width) + "\u2502");
+        System.out.println("\u2502" + Output.centered(showHand(gameInfo.dealer.hand()), width) + "\u2502");
+        System.out.println("\u2502" + Output.centered(showScore(gameInfo.dealer.hand().score()), width) + "\u2502");
 
-        System.out.println("│" + " ".repeat(width) + "│");
+        System.out.println("\u2502" + " ".repeat(width) + "\u2502");
 
-        System.out.println("│" + Output.centered(gameInfo.players.stream().map(p -> Output.centered(p.name, 11)).collect(Collectors.joining("    ")), width) + "│");
-        System.out.println("│" + Output.centered(gameInfo.players.stream().map(p -> showHand(p.hand)).collect(Collectors.joining("    ")), width) + "│");
-        System.out.println("│" + Output.centered(gameInfo.players.stream().map(p -> showScore(p.hand.score())).collect(Collectors.joining("    ")), width) + "│");
+        System.out.println("\u2502" + Output.centered(gameInfo.players.stream().map(p -> Output.centered(p.name, 11)).collect(Collectors.joining("    ")), width) + "\u2502");
+        System.out.println("\u2502" + Output.centered(gameInfo.players.stream().map(p -> showHand(p.hand)).collect(Collectors.joining("    ")), width) + "\u2502");
+        System.out.println("\u2502" + Output.centered(gameInfo.players.stream().map(p -> showScore(p.hand.score())).collect(Collectors.joining("    ")), width) + "\u2502");
 
-        System.out.println("└" + "─".repeat(width) + "┘");
+        System.out.println("\u2570" + "\u2500".repeat(width) + "\u256F");
     }
 
     protected String showHand(Hand hand) {
