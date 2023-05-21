@@ -13,7 +13,7 @@ import pt.up.fe.cpd.proj2.common.message.NackMessage;
 public class MainState implements State {
     @Override
     public Message run() {
-        var input =  Input.getFromOptions("Press enter to enter a queue, or type \"exit\" to exit", "", "exit");
+        var input =  Input.getFromOptions("Press enter to enter a queue, or type \"exit\" to exit ", "", "exit");
 
         if (input.equals("exit"))
             return new NackMessage();

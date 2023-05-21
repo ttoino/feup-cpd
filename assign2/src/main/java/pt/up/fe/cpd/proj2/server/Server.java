@@ -155,6 +155,8 @@ public class Server implements AutoCloseable {
                 e.printStackTrace();
             }
         }
+
+        selector.wakeup();
     }
 
     private void handleMessage(Message message, SocketChannel channel, SelectionKey key) throws IOException {

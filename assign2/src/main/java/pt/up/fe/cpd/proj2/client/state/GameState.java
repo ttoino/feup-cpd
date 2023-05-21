@@ -67,6 +67,8 @@ public class GameState implements State {
 
         var players = gameInfo.players.stream().sorted(Comparator.comparingInt(PlayerInfo::points).reversed()).toList();
 
+        System.out.println("Scoreboard\n");
+
         for (var player : players)
             System.out.println(player.name() + ": " + player.points());
 
