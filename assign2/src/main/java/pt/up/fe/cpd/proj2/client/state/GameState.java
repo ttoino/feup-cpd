@@ -1,15 +1,14 @@
 package pt.up.fe.cpd.proj2.client.state;
 
+import pt.up.fe.cpd.proj2.common.Input;
 import pt.up.fe.cpd.proj2.common.Output;
-import pt.up.fe.cpd.proj2.common.message.DrawMessage;
-import pt.up.fe.cpd.proj2.common.message.Message;
-import pt.up.fe.cpd.proj2.common.message.MoveMessage;
-import pt.up.fe.cpd.proj2.common.message.RoundStartMessage;
+import pt.up.fe.cpd.proj2.common.message.*;
 import pt.up.fe.cpd.proj2.game.Card;
 import pt.up.fe.cpd.proj2.game.Hand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +62,17 @@ public class GameState implements State {
         return Output.centered(s, 11);
     }
 
+    protected void showScoreboard() {
+        Output.clear();
+
+        var players = gameInfo.players.stream().sorted(Comparator.comparingInt(PlayerInfo::points).reversed()).toList();
+
+        for (var player : players)
+            System.out.println(player.name() + ": " + player.points());
+
+        System.out.println();
+    }
+
     @Override
     public State handle(Message message) {
         if (message instanceof DrawMessage drawMessage) {
@@ -77,6 +87,13 @@ public class GameState implements State {
                 player.hand().clear();
         } else if (message instanceof MoveMessage) {
             return new MoveState(gameInfo);
+        } else if (message instanceof GameEndMessage gameEndMessage) {
+            for (int i = 0; i < gameEndMessage.points().length; ++i)
+                gameInfo.players.get(i).addPoints(gameEndMessage.points()[i]);
+
+            showScoreboard();
+
+            return new MainState();
         }
 
         return new GameState(gameInfo);

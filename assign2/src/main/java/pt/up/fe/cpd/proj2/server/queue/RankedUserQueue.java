@@ -51,8 +51,13 @@ public class RankedUserQueue extends AbstractUserQueue {
                 }
 
                 var users = tryNextUsers(pivot);
-                if (users != null)
-                    return users;
+                if (users != null) {
+                    for (var user : users) {
+                        queue.remove(user);
+                        queueByElo.remove(user);
+                    }
+                    return users.stream().map(QueuedUser::user).toList();
+                }
             }
 
             return null;
@@ -61,15 +66,15 @@ public class RankedUserQueue extends AbstractUserQueue {
         }
     }
 
-    private List<User> tryNextUsers(QueuedUser pivot) {
+    private List<QueuedUser> tryNextUsers(QueuedUser pivot) {
         var elo = pivot.user().info().elo();
         var impatience = impatience(pivot);
 
         var nextUp = queueByElo.higherKey(pivot);
         var nextDown = queueByElo.lowerKey(pivot);
 
-        var users = new ArrayList<User>(Config.maxPlayers());
-        users.add(pivot.user());
+        var users = new ArrayList<QueuedUser>(Config.maxPlayers());
+        users.add(pivot);
 
         while ((nextUp != null || nextDown != null) && users.size() < Config.maxPlayers()) {
             var eloUp = nextUp == null ? Double.POSITIVE_INFINITY : nextUp.user().info().elo();
@@ -79,9 +84,7 @@ public class RankedUserQueue extends AbstractUserQueue {
                 var impatienceUp = impatience(nextUp);
 
                 if (elo + impatience >= eloUp - impatienceUp && nextUp.user().channel().isOpen()) {
-                    users.add(nextUp.user());
-                    queue.remove(nextUp);
-                    queueByElo.remove(nextUp);
+                    users.add(nextUp);
                 }
 
                 nextUp = queueByElo.higherKey(nextUp);
@@ -89,9 +92,7 @@ public class RankedUserQueue extends AbstractUserQueue {
                 var impatienceDown = impatience(nextDown);
 
                 if (elo - impatience <= eloDown + impatienceDown && nextDown.user().channel().isOpen()) {
-                    users.add(nextDown.user());
-                    queue.remove(nextDown);
-                    queueByElo.remove(nextDown);
+                    users.add(nextDown);
                 }
 
                 nextDown = queueByElo.lowerKey(nextDown);

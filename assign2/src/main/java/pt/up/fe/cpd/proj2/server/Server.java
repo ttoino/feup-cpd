@@ -1,10 +1,12 @@
 package pt.up.fe.cpd.proj2.server;
 
 import pt.up.fe.cpd.proj2.common.Config;
+import pt.up.fe.cpd.proj2.common.Elo;
 import pt.up.fe.cpd.proj2.common.Output;
 import pt.up.fe.cpd.proj2.common.Sockets;
 import pt.up.fe.cpd.proj2.common.message.*;
 import pt.up.fe.cpd.proj2.game.Game;
+import pt.up.fe.cpd.proj2.game.Player;
 import pt.up.fe.cpd.proj2.server.auth.FileUserInfoProvider;
 import pt.up.fe.cpd.proj2.server.auth.UserInfo;
 import pt.up.fe.cpd.proj2.server.auth.UserInfoProvider;
@@ -18,6 +20,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -99,7 +102,6 @@ public class Server implements AutoCloseable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                continue;
             }
         }
     }
@@ -116,7 +118,33 @@ public class Server implements AutoCloseable {
         Output.debug("Starting game with " + users.size() + " players: " + users.stream().map(u -> u.info().username()).collect(Collectors.joining(", ")));
 
         var game = new Game(users);
-        game.run();
+        var standings = game.run();
+
+        var size = standings.stream().map(Player::points).collect(Collectors.toSet()).size();
+        var place = 0;
+        var lastPoints = -1;
+        users = new ArrayList<>();
+
+        for (var player : standings) {
+            if (player.points() != lastPoints)
+                place++;
+
+            lastPoints = player.points();
+
+            Output.debug(player.user().channel(), "Finished in " + place + "th place with " + player.points() + " points");
+
+            var score = Elo.actualScore(place, size);
+            var expected = Elo.expectedScore(player.user().info().elo(), standings.stream().filter(p -> p.user() != player.user()).mapToDouble(p -> p.user().info().elo()).toArray());
+            var newElo = Elo.updatedRating(player.user().info().elo(), expected, score);
+
+            Output.debug(player.user().channel(), "Elo: " + player.user().info().elo() + " -> " + newElo);
+
+            var newUser = new UserInfo(player.user().info().id(), player.user().info().username(), player.user().info().password(), newElo);
+            userInfoProvider.update(newUser);
+
+            if (player.user().channel().isOpen())
+                users.add(new User(newUser, player.user().channel()));
+        }
 
         Output.debug("Game ended");
 

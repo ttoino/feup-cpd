@@ -20,11 +20,15 @@ public class Game {
         dealer = new Player(null);
     }
 
-    public void run() {
+    public List<Player> run() {
         broadcast(new GameStartMessage(players.stream().map(p -> p.user().info().username()).toArray(String[]::new)));
 
         while (players.stream().max(Comparator.comparingInt(Player::points)).get().points() < Config.maxPoints())
             round();
+
+        broadcast(new GameEndMessage(players.stream().mapToInt(Player::points).toArray()));
+
+        return players.stream().sorted(Comparator.comparingInt(Player::points).reversed()).toList();
     }
 
     public void round() {

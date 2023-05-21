@@ -18,7 +18,7 @@ public class Config {
 
     private static int decks = 2;
 
-    private static int maxPoints = 21;
+    private static int maxPoints = 7;
 
     /**
      * The maximum number of game threads (and thus games).

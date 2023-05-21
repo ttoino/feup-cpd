@@ -17,7 +17,7 @@ public final class Sockets {
         var queue = queues.computeIfAbsent(channel, c -> new LinkedList<>());
         var buffer = buffers.computeIfAbsent(channel, c -> ByteBuffer.allocate(1024));
 
-        if (queue.size() > 0) return queue.poll();
+        if (queue.size() > 0 || !channel.isOpen()) return queue.poll();
 
         try {
             buffer.clear();
